@@ -29,6 +29,10 @@
                 <strong>
                   <%= question_choice.text %>
                 </strong>
+                <br />
+                <span class="<%= question_choice.text_class %>">
+                  <%= "#{question_choice.creative_quality.name} #{question_choice.score}" %>
+                </span>
               <% else %>
                 <span class="text-muted">
                   <%= question_choice.text %>

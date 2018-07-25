@@ -4,4 +4,8 @@ class QuestionChoice < ApplicationRecord
 
   validates :text, :question, :creative_quality, presence: true
   validates :score, numericality: { only_integer: true }
+
+  def text_class
+    score >= 0 ? "text-success" : "text-danger"
+  end
 end
