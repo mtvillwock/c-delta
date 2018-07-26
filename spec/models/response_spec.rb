@@ -48,4 +48,34 @@ describe Response do
       end
     end
   end
+
+  describe '#choices_by_quality' do
+    let(:response) { Response.create!(first_name: "Test", last_name: "Case") }
+    let(:question) { create(:question) }
+    let(:creative_quality) { create(:creative_quality)}
+    let(:question_choice) { create(:question_choice, creative_quality: creative_quality, question: question) }
+    let(:question_response) { QuestionResponse.create!(response: response, question_choice: question_choice) }
+
+    before do
+      question.question_choices << question_choice
+      response.question_responses << question_response
+    end
+
+    context 'when question responses have a question choice for a given creative quality' do
+
+        subject { response.choices_by_quality(creative_quality) }
+
+      it 'returns question choices for that creative quality' do
+        expect(subject).to eq [question_choice]
+      end
+    end
+
+    context 'when no question choices for creative quality' do
+      let(:other_quality) { create(:creative_quality) }
+      subject { response.choices_by_quality(other_quality) }
+      it 'returns an empty array' do
+        expect(subject).to be_empty
+      end
+    end
+  end
 end

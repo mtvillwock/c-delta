@@ -17,6 +17,26 @@
     </div>
 
     <hr>
+    <% @creative_qualities.each do |creative_quality| %>
+      <% choices_by_quality = @response.choices_by_quality(creative_quality) %>
+
+      <% highest_choices_by_question = @response.highest_choices_by_question(creative_quality) %>
+
+      <div>
+      <strong>
+        <%= creative_quality.name %>
+      </strong>
+      <ul>
+        <li>
+          Raw score: <%= choices_by_quality.sum(&:score) %>
+        </li>
+        <li>
+          Max score: <%= highest_choices_by_question.sum(&:score) %>
+        </li>
+      </ul>
+      </div>
+    <% end %>
+    <hr>
 
     <% @response.question_responses.each do |question_response| %>
       <%= render 'questions/header', question: question_response.question %>
@@ -29,6 +49,10 @@
                 <strong>
                   <%= question_choice.text %>
                 </strong>
+                <br />
+                <span class="<%= question_choice.text_class %>">
+                  <%= "#{question_choice.creative_quality.name} #{question_choice.score}" %>
+                </span>
               <% else %>
                 <span class="text-muted">
                   <%= question_choice.text %>
